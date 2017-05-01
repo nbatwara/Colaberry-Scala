@@ -1,5 +1,6 @@
 package KafkaMain
 
+
 import akka.actor.{Actor, ActorLogging}
 import akka.kafka.ConsumerMessage.{CommittableMessage, CommittableOffsetBatch}
 import akka.kafka.scaladsl.Consumer.Control
@@ -7,7 +8,7 @@ import akka.stream.Materializer
 import akka.stream.scaladsl.{Keep, Sink}
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent._
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
@@ -43,12 +44,15 @@ class FileConsumer(implicit mat: Materializer) extends Actor with ActorLogging {
 
     context.become(running(control))
 
-   future.onFailure {
-      case ex =>
-        log.error("Stream failed due to error, restarting", ex)
-        throw ex
-    }
-    log.info("Logging Consumer Started")
+//   future.onComplete {
+//      case Error(res) => {
+//        log.error("Stream failed due to error, restarting")
+//        println("****Error****" + res)
+//      }
+//      case _ =>
+//        log.info("Logging Consumer Started")
+//   }
+
 
   }
   def running(control: Control): Receive = {
