@@ -52,10 +52,10 @@ class FileWriter extends Actor with ActorLogging {
 //        reader => reader.close())
       log.info("Initializing...Reading from source file...")
       val producerSettings = ProducerSettings(context.system, new ByteArraySerializer, new StringSerializer)
-        .withBootstrapServers("192.169.99.100:9092")
+        .withBootstrapServers("192.168.99.100:9092")
       val kafkaSink = Producer.plainSink(producerSettings)
 
-      val fileSource = "C:\\Users\\nehba_000\\Desktop\\FileLoaderMicroService\\sample-info.csv"
+      val fileSource = "C:\\Users\\nehba_000\\Desktop\\FileLoaderMicroService\\sample_info.csv"
 
   Source.unfoldResourceAsync[String, BufferedReader](
   () => Promise.successful(new BufferedReader(new FileReader(fileSource))).future,
@@ -64,7 +64,12 @@ class FileWriter extends Actor with ActorLogging {
     reader.close()
     self ! Stop
     Promise.successful(Done).future
-  }).map(new ProducerRecord[Array[Byte], String](FileNumberTopic.Topic, _)).toMat(kafkaSink)(Keep.both).run()
+  }).map( {
+      new ProducerRecord[Array[Byte], String](FileNumberTopic.Topic, _)
+        })
+    .toMat(kafkaSink)(Keep.both)
+    .run()
+  //(new ProducerRecord[Array[Byte], String](FileNumberTopic.Topic, _)).toMat(kafkaSink)(Keep.both).run()
 
       //val (control, future) = fileSource
 //        future.onFailure {

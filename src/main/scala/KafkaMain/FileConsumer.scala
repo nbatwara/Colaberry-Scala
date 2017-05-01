@@ -1,13 +1,14 @@
 package KafkaMain
 
 
-import akka.actor.{Actor, ActorLogging}
+import akka.actor.{Actor, ActorLogging, ActorSystem}
+import akka.event.Logging
 import akka.kafka.ConsumerMessage.{CommittableMessage, CommittableOffsetBatch}
 import akka.kafka.scaladsl.Consumer.Control
-import akka.stream.Materializer
 import akka.stream.scaladsl.{Keep, Sink}
+import akka.stream.{ActorMaterializer, Materializer}
+import com.typesafe.config.ConfigFactory
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
 import scala.concurrent.duration._
 import scala.language.postfixOps
@@ -15,6 +16,22 @@ import scala.language.postfixOps
 /**
   * Created by nehba_000 on 4/29/2017.
   */
+
+object FileConsumer extends App {
+  implicit val system = ActorSystem()
+  implicit val executor = system.dispatcher
+  implicit val materializer = ActorMaterializer()
+
+  val config = ConfigFactory.load()
+  val logger = Logging(system, getClass)
+
+  type Message = CommittableMessage[Array[Byte], String]
+  case object Start
+  case object Stop
+
+  val initialActor = classOf[FileWriter].getName
+  akka.Main.main(Array(initialActor))
+}
 
 class FileConsumer(implicit mat: Materializer) extends Actor with ActorLogging {
 
@@ -28,6 +45,11 @@ class FileConsumer(implicit mat: Materializer) extends Actor with ActorLogging {
   override def preStart(): Unit = {
     super.preStart()
     self ! Start
+  }
+
+  override def postStop(): Unit = {
+    super.postStop()
+    println("Producer stopped")
   }
 
   override def receive: Receive = {
@@ -70,8 +92,3 @@ class FileConsumer(implicit mat: Materializer) extends Actor with ActorLogging {
   }
 }
 
-object FileConsumer{
-  type Message = CommittableMessage[Array[Byte], String]
-  case object Start
-  case object Stop
-}
