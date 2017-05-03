@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/read-write-kafka-microservice.iml" filepath="$PROJECT_DIR$/.idea/modules/read-write-kafka-microservice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/read-write-kafka-microservice-build.iml" filepath="$PROJECT_DIR$/.idea/modules/read-write-kafka-microservice-build.iml" />
     </modules>
   </component>
 </project>

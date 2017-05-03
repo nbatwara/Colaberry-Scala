@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="SBT: com.spotify:docker-client:3.5.13:jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.ivy2/cache/com.spotify/docker-client/jars/docker-client-3.5.13.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.ivy2/cache/com.spotify/docker-client/srcs/docker-client-3.5.13-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
